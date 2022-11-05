@@ -29,13 +29,21 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  cupertino_icons: ^1.0.2
+  firebase_core: ^1.8.0
+  firebase_database: ^9.0.0
+  firebase_core_platform_interface: 4.5.1
+  firebase_auth: ^3.1.4
+  flutter_signin_button: ^2.0.0
+  google_sign_in: ^5.4.2
+  # firebase_core_platform_interface: 4.5.1 # note removed ^
+  # firebase_messaging: ^13.0.4 # previously I only had this which was pulling in 4.5.2 which you do not want
   flutter:
     sdk: flutter
-
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
+  splashscreen:
+    git:
+      url: https://github.com/DPLYR-dev/SplashScreenFlutterPackage.git
+      ref: master
 
 dev_dependencies:
   flutter_test:
