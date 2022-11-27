@@ -21,6 +21,7 @@ var _itemsList = List.generate(
     BLOCK_COUNT,
     (index) => Item(
           color: randomColor(),
+          isChecked: false,
         ));
 
 int gamePoints() {
@@ -35,27 +36,39 @@ int gamePoints() {
 
 void _swapItems(int position) {
   if (!_itemsList[position].isChecked) {
-    if ((position + 1) <= BLOCK_COUNT &&
+    if ((position + 1) < BLOCK_COUNT &&
         _itemsList[position].color == _itemsList[position + 1].color) {
       _itemsList[position].isChecked = true;
-      _itemsList[position + 1].isChecked = true;
+      _itemsList[position + 1] = Item(
+        color: 0,
+        isChecked: true,
+      );
     }
     if ((position - 1) >= 0 &&
         _itemsList[position].color == _itemsList[position - 1].color) {
       _itemsList[position].isChecked = true;
-      _itemsList[position - 1].isChecked = true;
+      _itemsList[position - 1] = Item(
+        color: 0,
+        isChecked: true,
+      );
     }
-    if ((position + BLOCK_COLUMNS) <= BLOCK_COUNT &&
+    if ((position + BLOCK_COLUMNS) < BLOCK_COUNT &&
         _itemsList[position].color ==
             _itemsList[position + BLOCK_COLUMNS].color) {
       _itemsList[position].isChecked = true;
-      _itemsList[position + BLOCK_COLUMNS].isChecked = true;
+      _itemsList[position + BLOCK_COLUMNS] = Item(
+        color: 0,
+        isChecked: true,
+      );
     }
     if ((position - BLOCK_COLUMNS) >= 0 &&
         _itemsList[position].color ==
             _itemsList[position - BLOCK_COLUMNS].color) {
       _itemsList[position].isChecked = true;
-      _itemsList[position - BLOCK_COLUMNS].isChecked = true;
+      _itemsList[position - BLOCK_COLUMNS] = Item(
+        color: 0,
+        isChecked: true,
+      );
     }
   }
 }
@@ -121,12 +134,12 @@ class _LevelPageState extends State<LevelPage> {
                   onReorder: (oldIndex, newIndex) {
                     Item path = _itemsList.removeAt(oldIndex);
                     _itemsList.insert(newIndex, path);
-
+                    _swapItems(newIndex);
                     movesAmount++;
                     if (widget.moves == movesAmount) {
                       _showSuccessDialog();
                     }
-                    _swapItems(newIndex);
+
                     setState(() {});
                   },
                 ),
