@@ -96,7 +96,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ],
         ),
-        body: const LevelsView(),
+        body: LevelsView(userEmail: user!.email!),
       );
     }
 
