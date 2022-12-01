@@ -16,35 +16,8 @@ class LevelsView extends StatefulWidget {
 class _LevelsViewState extends State<LevelsView> {
   List<int> levels = <int>[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
-  Future<void> addLevelInfo(email, levelId, stars) {
-    return FirebaseFirestore.instance
-      .collection('levelInfo')
-      .doc("${levelId} - ${widget.userEmail}")
-      .set({
-        'stars': stars
-      });
-  }
-
-  void initLevels(email) {
-    FirebaseFirestore.instance
-      .collection('levelInfo')
-      .doc("1 - ${widget.userEmail}")
-      .get()
-      .then((DocumentSnapshot documentSnapshot) {
-        if (!documentSnapshot.exists) {
-          addLevelInfo(email, 1, 0);
-          for(int i = 2; i <= 12; i++) {
-            addLevelInfo(email, i, -1);
-          }
-        }
-      });
-  }
-
   @override
   Widget build(BuildContext context) {
-    initLevels(widget.userEmail);
-
-
     return Scaffold(
       appBar: AppBar(
         primary: true,
