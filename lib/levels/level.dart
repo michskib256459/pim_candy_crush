@@ -45,7 +45,7 @@ void _swapItems(int position) {
         color: 0,
         isChecked: true,
       );
-      points++;
+      points = gamePoints();
     }
     if ((position - 1) >= 0 &&
         _itemsList[position].color == _itemsList[position - 1].color) {
@@ -54,7 +54,7 @@ void _swapItems(int position) {
         color: 0,
         isChecked: true,
       );
-      points++;
+      points = gamePoints();
     }
     if ((position + BLOCK_COLUMNS) < BLOCK_COUNT &&
         _itemsList[position].color ==
@@ -64,7 +64,7 @@ void _swapItems(int position) {
         color: 0,
         isChecked: true,
       );
-      points++;
+      points = gamePoints();
     }
     if ((position - BLOCK_COLUMNS) >= 0 &&
         _itemsList[position].color ==
@@ -74,7 +74,7 @@ void _swapItems(int position) {
         color: 0,
         isChecked: true,
       );
-      points++;
+      points = gamePoints();
     }
   }
 }
@@ -107,8 +107,8 @@ class _LevelPageState extends State<LevelPage> {
   _showSuccessDialog() {
     Widget okButton = TextButton(
         onPressed: () {
-          Navigator.pop(context);
           _restartGame();
+          Navigator.pop(context);
         },
         child: const Text('OK'));
 
@@ -118,7 +118,8 @@ class _LevelPageState extends State<LevelPage> {
       actions: [okButton],
     );
 
-    showDialog(context: context, builder: (BuildContext context) => alert);
+    showDialog(context: context, builder: (BuildContext context) => alert)
+        .then((value) => Navigator.pop(context, points));
   }
 
   @override
