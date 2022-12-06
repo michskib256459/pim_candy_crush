@@ -1,5 +1,5 @@
-import 'package:candy_crush/levels/level.dart';
 import 'package:candy_crush/levels/level_icon.dart';
+import 'package:candy_crush/levels/level_info.dart';
 import 'package:flutter/material.dart';
 
 class LevelsView extends StatefulWidget {
@@ -10,19 +10,19 @@ class LevelsView extends StatefulWidget {
 }
 
 class _LevelsViewState extends State<LevelsView> {
-  List<Level> levels = <Level>[
-    Level(1, 3),
-    Level(2, 3),
-    Level(3, 3),
-    Level(4, 1),
-    Level(5, 3),
-    Level(6, 3),
-    Level(7, 2),
-    Level(8, 2),
-    Level(9, 3),
-    Level(10, 0),
-    Level(11, -1),
-    Level(12, -1),
+  List<LevelInfo> levels = <LevelInfo>[
+    LevelInfo(1, 3),
+    LevelInfo(2, 3),
+    LevelInfo(3, 3),
+    LevelInfo(4, 1),
+    LevelInfo(5, 3),
+    LevelInfo(6, 3),
+    LevelInfo(7, 2),
+    LevelInfo(8, 2),
+    LevelInfo(9, 3),
+    LevelInfo(10, 0),
+    LevelInfo(11, -1),
+    LevelInfo(12, -1),
   ];
 
   @override

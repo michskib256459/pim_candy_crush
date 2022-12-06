@@ -1,8 +1,8 @@
-import 'package:candy_crush/levels/level.dart';
+import 'package:candy_crush/levels/level_info.dart';
 import 'package:flutter/material.dart';
 
 class LevelIcon extends StatelessWidget {
-  final Level level;
+  final LevelInfo level;
   final double size;
 
   const LevelIcon({super.key, required this.level, this.size = 24});
