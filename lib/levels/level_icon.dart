@@ -79,7 +79,9 @@ class LevelIcon extends StatelessWidget {
                 ),
         ),
         onTap: () {
-          Navigator.pushNamed(context, '/level', arguments: level);
+          if (level.stars >= 0) {
+            Navigator.pushNamed(context, '/level', arguments: level);
+          }
         },
       ),
     );
