@@ -45,20 +45,20 @@ class _LevelsViewState extends State<LevelsView> {
                   builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
                     if (snapshot.hasError) {
                       print(snapshot.hasError);
-                      return LevelIcon(level: Level(levelId, -1));
+                      return LevelIcon(level: LevelInfo(levelId, -1));
                     }
 
                     if (snapshot.hasData && !snapshot.data!.exists) {
                       print("Document '${documentId}' does not exist");
-                      return LevelIcon(level: Level(levelId, -1));
+                      return LevelIcon(level: LevelInfo(levelId, -1));
                     }
 
                     if (snapshot.connectionState == ConnectionState.done) {
                       Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
-                      return LevelIcon(level: Level(levelId, data['stars']));
+                      return LevelIcon(level: LevelInfo(levelId, data['stars']));
                     }
 
-                    return LevelIcon(level: Level(levelId, -1));
+                    return LevelIcon(level: LevelInfo(levelId, -1));
                   }
                 );
               }
