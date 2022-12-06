@@ -65,6 +65,8 @@ class _MyHomePageState extends State<MyHomePage> {
       .collection('levelInfo')
       .doc("${levelId} - ${email}")
       .set({
+        'email': email,
+        'levelId': levelId,
         'stars': stars
       });
   }

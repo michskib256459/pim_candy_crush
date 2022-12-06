@@ -16,6 +16,10 @@ class LevelsView extends StatefulWidget {
 class _LevelsViewState extends State<LevelsView> {
   List<int> levels = <int>[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
+  refreshWidget() {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,25 +44,34 @@ class _LevelsViewState extends State<LevelsView> {
               (levelId) {
                 CollectionReference levelInfo = FirebaseFirestore.instance.collection('levelInfo');
                 String documentId = "${levelId} - ${widget.userEmail}";
-                return FutureBuilder<DocumentSnapshot>(
-                  future:  levelInfo.doc(documentId).get(),
-                  builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                return FutureBuilder<QuerySnapshot>(
+                  future:  levelInfo.where('email', isEqualTo: widget.userEmail)
+                                    .where('levelId', isEqualTo: levelId)
+                                    .get(),
+                  builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
                     if (snapshot.hasError) {
                       print(snapshot.hasError);
-                      return LevelIcon(level: LevelInfo(levelId, -1));
-                    }
-
-                    if (snapshot.hasData && !snapshot.data!.exists) {
-                      print("Document '${documentId}' does not exist");
-                      return LevelIcon(level: LevelInfo(levelId, -1));
+                      return LevelIcon(
+                        level: LevelInfo(levelId, -1),
+                        updateLevelsView: refreshWidget,
+                        userEmail: widget.userEmail
+                      );
                     }
 
                     if (snapshot.connectionState == ConnectionState.done) {
-                      Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
-                      return LevelIcon(level: LevelInfo(levelId, data['stars']));
+                      Map<String, dynamic> data = snapshot.data!.docs[0].data() as Map<String, dynamic>;
+                      return LevelIcon(
+                        level: LevelInfo(levelId, data['stars']),
+                        updateLevelsView: refreshWidget,
+                        userEmail: widget.userEmail
+                      );
                     }
 
-                    return LevelIcon(level: LevelInfo(levelId, -1));
+                    return LevelIcon(
+                      level: LevelInfo(levelId, -1),
+                      updateLevelsView: refreshWidget,
+                      userEmail: widget.userEmail
+                    );
                   }
                 );
               }

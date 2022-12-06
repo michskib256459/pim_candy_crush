@@ -1,11 +1,62 @@
 import 'package:candy_crush/levels/level_info.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LevelIcon extends StatelessWidget {
   final LevelInfo level;
   final double size;
+  final Function updateLevelsView;
+  final String userEmail;
 
-  const LevelIcon({super.key, required this.level, this.size = 24});
+  const LevelIcon({super.key, required this.level, required this.updateLevelsView, required this.userEmail, this.size = 24});
+
+  updateScore(score) async {
+    int stars = -1;
+    if (score < 5) {
+      stars = 0;
+    }
+    else if (score < 9) {
+      stars = 1;
+    }
+    else if (score < 14) {
+      stars = 2;
+    }
+    else {
+      stars = 3;
+    }
+
+
+    // Update stars for level if score is better
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+      .collection('levelInfo')
+      .where('email', isEqualTo: userEmail)
+      .where('levelId', isEqualTo: level.id)
+      .where('stars', isLessThan: stars)
+      .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      await querySnapshot.docs[0]
+        .reference
+        .update({'stars': stars});
+    }
+
+
+    // Unlock next level if blocked and stars > 0
+    if ( stars > 0 ) {
+          QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+            .collection('levelInfo')
+            .where('email', isEqualTo: userEmail)
+            .where('levelId', isEqualTo: level.id + 1)
+            .where('stars', isEqualTo: -1)
+            .get();
+
+          if (querySnapshot.docs.isNotEmpty) {
+            await querySnapshot.docs[0]
+              .reference
+              .update({'stars': 0});
+          }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,9 +131,9 @@ class LevelIcon extends StatelessWidget {
         ),
         onTap: () async {
           if (level.stars >= 0) {
-            var val =
-                await Navigator.pushNamed(context, '/level', arguments: level);
-            print(val);
+            var val = await Navigator.pushNamed(context, '/level', arguments: level);
+            await updateScore(val);
+            updateLevelsView();
           }
         },
       ),
