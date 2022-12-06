@@ -45,6 +45,7 @@ dependencies:
     git:
       url: https://github.com/DPLYR-dev/SplashScreenFlutterPackage.git
       ref: master
+  cloud_firestore: ^3.5.1
 
 dev_dependencies:
   flutter_test:

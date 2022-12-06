@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:candy_crush/auth/login.dart';
 import 'package:candy_crush/auth/google_auth_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -59,6 +60,32 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   bool is_logged_in = false;
 
+  Future<void> addLevelInfo(email, levelId, stars) {
+    return FirebaseFirestore.instance
+      .collection('levelInfo')
+      .doc("${levelId} - ${email}")
+      .set({
+        'email': email,
+        'levelId': levelId,
+        'stars': stars
+      });
+  }
+
+  Future<void> initLevels(email) {
+    return FirebaseFirestore.instance
+      .collection('levelInfo')
+      .doc("1 - ${email}")
+      .get()
+      .then((DocumentSnapshot documentSnapshot) {
+        if (!documentSnapshot.exists) {
+          addLevelInfo(email, 1, 0);
+          for(int i = 2; i <= 12; i++) {
+            addLevelInfo(email, i, -1);
+          }
+        }
+      });
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -96,7 +123,12 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ],
         ),
-        body: const LevelsView(),
+        body: FutureBuilder<void>(
+          future:  initLevels(user!.email!),
+          builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+            return LevelsView(userEmail: user!.email!);
+          }
+        ),
       );
     }
 
